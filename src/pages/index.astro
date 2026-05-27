@@ -3,6 +3,29 @@ import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+
+import Carousel from '../components/Carousel.astro';
+
+const imageFiles = import.meta.glob('/src/assets/**/*', { eager: true });
+console.log('Found paths:', Object.keys(imageFiles));
+
+const projects = {};
+for (const path of Object.keys(imageFiles)) {
+  const file = imageFiles[path];
+  if (!file.default?.src) continue;
+
+  const parts = path.split('/');
+  const folder = parts[parts.length - 2];
+
+  if (!projects[folder]) projects[folder] = [];
+  projects[folder].push({ 
+    src: file.default,  // pass the whole object, not just .src
+    alt: parts[parts.length - 1] 
+  });
+}
+
+console.log('Projects found:', Object.keys(projects));
+console.log('Vault images:', projects['Vault']);
 ---
 
 <!doctype html>
@@ -20,6 +43,13 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 			<ul>
 				<li>Exmaple List <code>Exmaple code highlight</code></li>
 			</ul>
+
+			{Object.entries(projects).map(([projectName, images]) => (
+				<section>
+					<h2>{projectName.replace(/-/g, ' ')}</h2>
+					<Carousel images={images} />
+				</section>
+				))}
 
 		</main>
 		<Footer />

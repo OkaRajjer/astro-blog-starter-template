@@ -1,0 +1,94 @@
+---
+import { Image } from 'astro:assets';
+const { images, id } = Astro.props;
+---
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4/dist/css/splide.min.css">
+
+<div id={id} class="splide" style="position: relative;">
+  <div class="splide__track">
+    <ul class="splide__list">
+      {images.map((img) => (
+        <li class="splide__slide">
+          <Image src={img.src} alt={img.alt} width={img.src.width} height={img.src.height} />
+        </li>
+      ))}
+    </ul>
+  </div>
+</div>
+
+<script>
+  import Splide from '@splidejs/splide';
+  document.querySelectorAll('.splide').forEach((el) => {
+    new Splide(el, {
+      type: 'loop',
+      perPage: 1,
+      autoplay: true,
+      interval: 3000,
+      pauseOnHover: true,
+    }).mount();
+  });
+</script>
+
+<style>
+  :global(.splide__slide img) {
+    width: 100% !important;
+    height: 400px !important;
+    object-fit: contain !important;
+    object-position: center !important;
+    border-radius: 3px !important;
+  }
+
+  :global(.splide) {
+    border-radius: 5px !important;
+  }
+
+  :global(.splide__arrow) {
+    background: rgba(249, 225, 175, 0.4) !important;
+    border-radius: 25px !important;
+  }
+
+  :global(.splide__arrow svg) {
+    fill: rgb(250, 179, 135, 0.4) !important;
+  }
+
+    :global(.splide__arrow:hover svg) {
+    fill: rgb(243, 139, 168, 0.6) !important;
+  }
+
+  :global(.splide__arrow:hover) {
+    background: rgb(250, 179, 135, 0.6) !important;
+  }
+
+  :global(.splide__pagination) {
+    display: flex !important;
+    width: 98% !important;
+    padding: 0 6px !important;
+    box-sizing: border-box !important;
+    gap: 0px !important;
+    position: absolute !important;
+    bottom: 8px !important;
+    left: 0 !important;
+    z-index: 10 !important;
+  }
+
+  :global(.splide__pagination li) {
+    flex: 1 !important;
+    display: flex !important;
+  }
+
+  :global(.splide__pagination__page) {
+    flex: 1 !important;
+    background: rgb(245, 224, 220) !important;
+    border-radius: 8px !important;
+    height: 3px !important;
+    width: 98% !important;
+    margin: 2% !important;
+    padding: 0 !important;
+  }
+
+  :global(.splide__pagination__page.is-active) {
+    background: rgb(228, 186, 186) !important;
+    height: 5px !important;
+  }
+</style>
